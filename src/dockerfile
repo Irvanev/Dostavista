@@ -1,0 +1,16 @@
+# Используем официальный образ PostgreSQL
+FROM postgres:latest
+
+# Устанавливаем переменные окружения для конфигурации базы данных
+ENV POSTGRES_USER=myuser
+ENV POSTGRES_PASSWORD=mypassword
+ENV POSTGRES_DB=mydatabase
+
+# Копируем скрипты инициализации базы данных (если есть)
+# COPY init.sql /docker-entrypoint-initdb.d/
+
+# Открываем порт для доступа к базе данных
+EXPOSE 5432
+
+# Команда для запуска PostgreSQL
+CMD ["postgres"]
