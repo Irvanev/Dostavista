@@ -1,9 +1,7 @@
 package com.example.dostavista.models.entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import com.example.dostavista.models.enums.UserRoleEnum;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +16,7 @@ public class Users extends BaseEntity {
     private String numberPhone;
     private String name;
     private String passport;
+    private UserRoleEnum role;
     private LocalDateTime timeCreation;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "courier", cascade = CascadeType.REMOVE)
@@ -85,6 +84,15 @@ public class Users extends BaseEntity {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    @Enumerated(EnumType.STRING)
+    public UserRoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(UserRoleEnum role) {
+        this.role = role;
     }
 
     public LocalDateTime getTimeCreation() {

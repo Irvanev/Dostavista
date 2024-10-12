@@ -4,9 +4,11 @@ import com.example.dostavista.dtos.usersDtos.AddUserDto;
 import com.example.dostavista.dtos.usersDtos.AllUsersDto;
 import com.example.dostavista.dtos.usersDtos.UpdateUserDto;
 import com.example.dostavista.models.entities.Users;
+import com.example.dostavista.models.enums.UserRoleEnum;
 import com.example.dostavista.repositories.UserRepository;
 import com.example.dostavista.services.UserService;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,29 +21,42 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
 
     @Override
-    public void addUser(AddUserDto addUserDto) {
-        Users user = new Users();
-        user.setName(addUserDto.getName());
-        user.setEmail(addUserDto.getEmail());
-        user.setNumberPhone(addUserDto.getNumberPhone());
+    public AllUsersDto addUser(AddUserDto addUserDto) {
+        Users user = modelMapper.map(addUserDto, Users.class);
+
+        user.setRole(UserRoleEnum.CUSTOMER);
         user.setTimeCreation(LocalDateTime.now());
 
-        userRepository.saveAndFlush(user);
+        return modelMapper.map(userRepository.saveAndFlush(user), AllUsersDto.class);
     }
 
     @Override
-    public void updateUser(UpdateUserDto updateUserDto, UUID userId) {
-        Users user = userRepository.findById(userId).orElse(null);
-        user.setName(updateUserDto.getName());
-        user.setEmail(updateUserDto.getEmail());
-        user.setPassport(updateUserDto.getPassport());
+    public AllUsersDto updateUser(UpdateUserDto updateUserDto, UUID userId) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (updateUserDto.getEmail() != null) {
+            user.setEmail(updateUserDto.getEmail());
+        }
+        if (updateUserDto.getNumberPhone() != null) {
+            user.setNumberPhone(updateUserDto.getNumberPhone());
+        }
+        if (updateUserDto.getName() != null) {
+            user.setName(updateUserDto.getName());
+        }
+        if (updateUserDto.getPassport() != null) {
+            user.setPassport(updateUserDto.getPassport());
+        }
+
+        return modelMapper.map(userRepository.saveAndFlush(user), AllUsersDto.class);
     }
 
     @Override
@@ -51,13 +66,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<AllUsersDto> getUserById(UUID id) {
-        return userRepository.findById(id).map(user -> new AllUsersDto(user.getId(), user.getEmail(), user.getNumberPhone(), user.getName()));
+        return userRepository.findById(id)
+                .map(user -> modelMapper.map(user, AllUsersDto.class));
     }
 
 
     @Override
     public List<AllUsersDto> allUsers() {
-        return userRepository.findAll().stream().map(user -> new AllUsersDto(user.getId(), user.getEmail(), user.getNumberPhone(), user.getName()))
+        return userRepository.findAll().stream().map(users -> modelMapper.map(users, AllUsersDto.class))
                 .collect(Collectors.toList());
     }
 }

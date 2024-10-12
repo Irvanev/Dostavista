@@ -6,18 +6,19 @@ import com.example.dostavista.models.enums.OrderTypeEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Orders extends BaseEntity {
     private Users customer;
     private Users courier;
     private int price;
-    private OrderStatusEnum status;
-    private OrderTypeEnum type;
     private String pickupAddress;
     private String deliveryAddress;
     private LocalDateTime pickupTime;
     private LocalDateTime deliveryTime;
+    private OrderStatusEnum status;
+    private OrderTypeEnum type;
     private String description;
     private String weight;
     private LocalDateTime created;
@@ -47,6 +48,38 @@ public class Orders extends BaseEntity {
         this.price = price;
     }
 
+    public String getPickupAddress() {
+        return pickupAddress;
+    }
+
+    public void setPickupAddress(String pickupAddress) {
+        this.pickupAddress = pickupAddress;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public LocalDateTime getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(LocalDateTime pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public LocalDateTime getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(LocalDateTime deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
+
     @Enumerated(EnumType.STRING)
     public OrderStatusEnum getStatus() {
         return status;
@@ -61,34 +94,6 @@ public class Orders extends BaseEntity {
     }
     public void setType(OrderTypeEnum type) {
         this.type = type;
-    }
-
-    public String getPickupAddress() {
-        return pickupAddress;
-    }
-    public void setPickupAddress(String pickupAddress) {
-        this.pickupAddress = pickupAddress;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public LocalDateTime getPickupTime() {
-        return pickupTime;
-    }
-    public void setPickupTime(LocalDateTime pickupTime) {
-        this.pickupTime = pickupTime;
-    }
-
-    public LocalDateTime getDeliveryTime() {
-        return deliveryTime;
-    }
-    public void setDeliveryTime(LocalDateTime deliveryTime) {
-        this.deliveryTime = deliveryTime;
     }
 
     public String getDescription() {

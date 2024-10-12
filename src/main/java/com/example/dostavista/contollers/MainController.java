@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api")
 public class MainController {
     @GetMapping
     public ResponseEntity<?> getRoot() {
@@ -23,8 +23,13 @@ public class MainController {
                 .withRel("orders")
                 .withTitle("Запросы для заказов");
 
+        Link ratingsLink = WebMvcLinkBuilder
+                .linkTo(WebMvcLinkBuilder.methodOn(RatingController.class).allRatings())
+                .withRel("feedbacks")
+                .withTitle("Запросы для отзывов");
+
         return ResponseEntity.ok(
-                new MainClass(usersLink, orersLink)
+                new MainClass(usersLink, orersLink, ratingsLink)
         );
     }
 }

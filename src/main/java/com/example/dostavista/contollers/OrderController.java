@@ -3,7 +3,7 @@ package com.example.dostavista.contollers;
 import com.example.dostavista.dtos.ordersDtos.AddOrderDto;
 import com.example.dostavista.dtos.ordersDtos.AllOrdersDto;
 import com.example.dostavista.dtos.ordersDtos.TakeOrderDto;
-import com.example.dostavista.dtos.usersDtos.AllUsersDto;
+import com.example.dostavista.models.enums.OrderStatusEnum;
 import com.example.dostavista.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,6 +42,7 @@ public class OrderController {
         List<AllOrdersDto> orders = orderService.allOrders();
         orders.forEach(order -> {
             order.add(linkTo(methodOn(OrderController.class).getOrder(order.getId())).withSelfRel());
+            order.add(linkTo(methodOn(OrderController.class).takeOrder(order.getId(), null)).withRel("takeOrder"));
         });
         Link allOrdersLink = linkTo(methodOn(OrderController.class).allOrders())
                 .withSelfRel();
@@ -60,8 +61,44 @@ public class OrderController {
                 .orElse(null);
     }
 
-    @PutMapping("{id}")
-    public void takeOrder(@PathVariable UUID id, @RequestBody @Valid TakeOrderDto takeOrderDto) {
+    @PutMapping("/{id}")
+    @Operation(summary = "Обновление персональных данных пользователя", description = "Обновление персональных данных пользователя")
+    public ResponseEntity<AllOrdersDto> takeOrder(@PathVariable UUID id, @RequestBody @Valid TakeOrderDto takeOrderDto) {
         orderService.takeOrder(takeOrderDto, id);
+
+        AllOrdersDto takeOrder = orderService.getOrder(id)
+                .map(order -> {
+                    order.add(linkTo(methodOn(OrderController.class).getOrder(id))
+                            .withSelfRel());
+                    return order;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+
+        return ResponseEntity.ok(takeOrder);
+    }
+
+    @GetMapping("/{customerId}")
+    public List<AllOrdersDto> getOrdersCustomerId(@PathVariable UUID customerId) {
+        return orderService.getCustomerOrders(customerId);
+    }
+
+    @GetMapping("/created")
+    public List<AllOrdersDto> getCreatedOrders() {
+        return orderService.allCreateOrders(OrderStatusEnum.CREATED);
+    }
+
+    @GetMapping("/created")
+    public List<AllOrdersDto> getTakenOrders() {
+        return orderService.allCreateOrders(OrderStatusEnum.TAKEN);
+    }
+
+    @GetMapping("/in_progress")
+    public List<AllOrdersDto> getProgressOrders() {
+        return orderService.allCreateOrders(OrderStatusEnum.IN_PROGRESS);
+    }
+
+    @GetMapping("/completed")
+    public List<AllOrdersDto> getCompletedOrders() {
+        return orderService.allCreateOrders(OrderStatusEnum.COMPLETED);
     }
 }

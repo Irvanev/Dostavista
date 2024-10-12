@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,7 +35,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void addOrder(AddOrderDto addOrderDto) {
         Orders order = modelMapper.map(addOrderDto, Orders.class);
-        order.setCustomer(userRepository.findById(addOrderDto.getOrderId()).orElseThrow());
+        order.setCustomer(userRepository.findById(addOrderDto.getCustomerId()).orElseThrow());
+        order.setStatus(OrderStatusEnum.CREATED);
+        order.setCreated(LocalDateTime.now());
         orderRepository.saveAndFlush(order);
     }
 
@@ -46,11 +49,17 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.saveAndFlush(order);
     }
 
-//    @Override
-//    public List<AllOrdersDto> getCustomersOrders(UUID userId) {
-//        return orderRepository.findByCustomerId(userId).stream().map(order -> modelMapper.map(order, AllOrdersDto.class))
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    public List<AllOrdersDto> getCustomerOrders(UUID customerId) {
+        return orderRepository.findByCustomerId(customerId).stream().map(order -> modelMapper.map(order, AllOrdersDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AllOrdersDto> getCourierOrders(UUID courierId) {
+        return orderRepository.findByCustomerId(courierId).stream().map(order -> modelMapper.map(order, AllOrdersDto.class))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public Optional<AllOrdersDto> getOrder(UUID orderId) {
@@ -60,6 +69,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<AllOrdersDto> allOrders() {
         return orderRepository.findAll().stream().map(order -> modelMapper.map(order, AllOrdersDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AllOrdersDto> allCreateOrders(OrderStatusEnum status) {
+        return orderRepository.findOrderByStatus(status).stream().map(orders -> modelMapper.map(orders, AllOrdersDto.class))
                 .collect(Collectors.toList());
     }
 }

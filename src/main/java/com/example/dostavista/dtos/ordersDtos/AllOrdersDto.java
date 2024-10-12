@@ -1,6 +1,5 @@
 package com.example.dostavista.dtos.ordersDtos;
 
-import com.example.dostavista.models.entities.Users;
 import com.example.dostavista.models.enums.OrderStatusEnum;
 import com.example.dostavista.models.enums.OrderTypeEnum;
 import org.springframework.hateoas.RepresentationModel;
@@ -10,6 +9,8 @@ import java.util.UUID;
 
 public class AllOrdersDto extends RepresentationModel<AllOrdersDto> {
     private UUID id;
+    private UUID customerId;
+    private UUID courierId;
     private int price;
     private OrderStatusEnum status;
     private OrderTypeEnum type;
@@ -27,6 +28,22 @@ public class AllOrdersDto extends RepresentationModel<AllOrdersDto> {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(UUID customerId) {
+        this.customerId = customerId;
+    }
+
+    public UUID getCourierId() {
+        return courierId;
+    }
+
+    public void setCourierId(UUID courierId) {
+        this.courierId = courierId;
     }
 
     public int getPrice() {

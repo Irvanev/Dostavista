@@ -1,11 +1,30 @@
 package com.example.dostavista.dtos.usersDtos;
 
+import com.example.dostavista.models.enums.UserRoleEnum;
 import org.springframework.hateoas.RepresentationModel;
 
 public class UpdateUserDto extends RepresentationModel<UpdateUserDto> {
+    private String email;
+    private String numberPhone;
     private String name;
     private String passport;
-    private String email;
+    private UserRoleEnum role;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNumberPhone() {
+        return numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
+    }
 
     public String getName() {
         return name;
@@ -23,11 +42,11 @@ public class UpdateUserDto extends RepresentationModel<UpdateUserDto> {
         this.passport = passport;
     }
 
-    public String getEmail() {
-        return email;
+    public UserRoleEnum getRole() {
+        return role;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setRole(UserRoleEnum role) {
+        this.role = role;
     }
 }

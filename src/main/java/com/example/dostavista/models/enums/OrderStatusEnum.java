@@ -1,8 +1,8 @@
 package com.example.dostavista.models.enums;
 
 public enum OrderStatusEnum {
-    PENDING,
+    CREATED,
+    TAKEN,
     IN_PROGRESS,
-    COMPLETED,
-    CANCELED
+    COMPLETED
 }

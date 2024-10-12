@@ -13,6 +13,7 @@ public class AddUserDto {
     private String email;
     private String numberPhone;
     private String name;
+    private String passport;
 
     @Schema(description = "Почта", example = "test@mail.ru")
     public String getEmail() {
@@ -41,5 +42,14 @@ public class AddUserDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Schema(description = "Паспорт", example = "73893829")
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
     }
 }

@@ -1,0 +1,52 @@
+type Query {
+    getUsers: [User]
+    findUserById(id: ID!): User
+
+    getFeedbacks: [Feedback]
+    findFeedbackByCustomerId(customerId: ID!): [Feedback]
+    findFeedbackByCourierId(courierId: ID!): [Feedback]
+}
+
+type Mutation {
+    addUser(user: AddUserDto): User
+    updateUser(id: ID!, user: UpdateUserDto): User
+    deleteUser(id: ID!): Boolean
+    addFeedback(feedback: AddRatingDto): Feedback
+}
+
+type User {
+    id: ID
+    name: String
+    email: String
+    numberPhone: String
+    passport: String
+}
+
+type Feedback {
+    id: ID
+    courierId: ID
+    customerId: ID
+    rating: Int
+    description: String
+}
+
+input AddRatingDto {
+    courierId: ID!
+    customerId: ID!
+    rating: Int!
+    description: String!
+}
+
+input UpdateUserDto {
+    name: String!
+    email: String!
+    passport: String!
+    numberPhone: String!
+}
+
+input AddUserDto {
+    name: String!
+    email: String!
+    numberPhone: String!
+    passport: String!
+}

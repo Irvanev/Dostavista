@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class AddOrderDto {
-    private UUID orderId;
+    private UUID customerId;
     private int price;
     private String pickupAddress;
     private String deliveryAddress;
@@ -18,18 +18,18 @@ public class AddOrderDto {
     private String weight;
     private OrderTypeEnum type;
 
-    public AddOrderDto(UUID orderId, OrderTypeEnum type) {
-        this.orderId = orderId;
+    public AddOrderDto(UUID customerId, OrderTypeEnum type) {
+        this.customerId = customerId;
         this.type = type;
     }
 
     @Schema(description = "ID", example = "je82-ne-83bfjhw-nefe82")
-    public UUID getOrderId() {
-        return orderId;
+    public UUID getCustomerId() {
+        return customerId;
     }
 
-    public void setOrderId(UUID orderId) {
-        this.orderId = orderId;
+    public void setCustomerId(UUID customerId) {
+        this.customerId = customerId;
     }
 
     @Schema(description = "Price", example = "17392")
